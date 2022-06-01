@@ -10,21 +10,31 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
+type SocketManager struct {
+	upgrader          websocket.Upgrader
+	createPostHandler *handlers.CreatePostHandler
+	savePostHandler   *handlers.SavePostHandler
 }
 
-func handler(c echo.Context) error {
+func NewSocketManager(createPostHandler *handlers.CreatePostHandler, savePostHandler *handlers.SavePostHandler) SocketManager {
+	upgdr := websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
+	}
+
+	return SocketManager{upgrader: upgdr, createPostHandler: createPostHandler, savePostHandler: savePostHandler}
+}
+
+func (socketManager SocketManager) Handler(c echo.Context) error {
 	// TO PREVENT CORS ERRORS
-	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
+	socketManager.upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
 	// THIS IS ONE OF THE BENEFITS OF USING GO
 	// I WAS USING WEBSOCKETS IN NODEJS AND DART BEFORE BUT
 	// I DIDNT'T KNOW THE ESSENCE OF IT & HOW IT WORKS IN THE BACK, WHAT'S BEHIND IT
 	// I ALWAYS THOUGHT IT IS TOTALLY A SEPARATE PROTOCOL
 	// BUT NOW , I KNOW THAT IT IS NOTHING BUT A UPGRADED HTTP GET REQUEST
-	ws, err := upgrader.Upgrade(c.Response(), c.Request(), nil)
+	ws, err := socketManager.upgrader.Upgrade(c.Response(), c.Request(), nil)
 
 	if err != nil {
 		fmt.Println(err)
@@ -49,14 +59,14 @@ func handler(c echo.Context) error {
 
 		switch parsedMessage.Type {
 		case CreatePost:
-			handlers.CreatePostHandler(ws)
+			socketManager.createPostHandler.Create(ws)
 		case SavePost:
-			handlers.SavePostHandler(ws, parsedMessage)
+			socketManager.savePostHandler.Save(ws)
 		}
 	}
 
 }
 
-func GetWebsocketHandler() endpoints.Endpoint {
-	return endpoints.NewEndpoint("/ws", handler, "GET")
+func (socketManager SocketManager) GetWebsocketHandler() endpoints.Endpoint {
+	return endpoints.NewEndpoint("/ws", socketManager.Handler, "GET")
 }

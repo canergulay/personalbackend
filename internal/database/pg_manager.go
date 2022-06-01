@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"log"
 
+	"github.canergulay/blogbackend/internal/server/endpoints/routes/blog"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 type PGManager struct {
-	db *gorm.DB
+	DB *gorm.DB
 }
 
 func InitPG() PGManager {
@@ -22,10 +23,14 @@ func InitPG() PGManager {
 		PORT,
 		SSL)
 
-	fmt.Println("WORKED I GUESS", dsn)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	autoMigrater(db)
 	if err != nil {
 		log.Fatalln("AN UNEXPECTED ERROR !", err)
 	}
-	return PGManager{db: db}
+	return PGManager{DB: db}
+}
+
+func autoMigrater(db *gorm.DB) {
+	db.AutoMigrate(&blog.Post{})
 }

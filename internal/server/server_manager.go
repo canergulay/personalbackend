@@ -13,10 +13,13 @@ type ServerManager struct {
 	e echo.Echo
 }
 
-func InitialiseAllRoutes() ServerManager {
-	ws := websocket.GetWebsocketHandler()
-	home := home.GetHomeEndpoint()
-	return getNewServerManager(home, ws)
+func InitialiseAllRoutes(
+	socketManager websocket.SocketManager,
+	homeManager home.HomeManager) ServerManager {
+
+	return getNewServerManager(
+		homeManager.GetHomeEndpoint(),
+		socketManager.GetWebsocketHandler())
 }
 
 func getNewServerManager(endpoints ...endpoints.Endpoint) ServerManager {
