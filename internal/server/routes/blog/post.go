@@ -15,3 +15,8 @@ func (bm BlogManager) CreateBlog() int {
 	bm.DB.Create(&post)
 	return post.ID
 }
+
+func (bm BlogManager) SavePost(post *Post) *Post {
+	bm.DB.Save(post)
+	return post
+}

@@ -7,6 +7,7 @@ import (
 	"github.canergulay/blogbackend/internal/server/routes/home"
 	"github.canergulay/blogbackend/internal/server/services"
 	"github.canergulay/blogbackend/internal/server/websocket"
+	"github.canergulay/blogbackend/internal/server/websocket/handlers"
 )
 
 func main() {
@@ -15,7 +16,8 @@ func main() {
 	blogManager := blog.NewBlogManager(pgManager.DB)
 	createPostService := services.NewCreatePostService(&blogManager)
 	savePostService := services.NewSavePostService(&blogManager)
-	sv := server.InitialiseAllRoutes(websocket.NewSocketManager(&createPostService, &savePostService), home.NewHomeManager())
+	websocketHandler := handlers.NewWebSocketHandler(&createPostService, &savePostService)
+	sv := server.InitialiseAllRoutes(websocket.NewSocketManager(&websocketHandler), home.NewHomeManager())
 	sv.StartServer(":8080")
 
 }
