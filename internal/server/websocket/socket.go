@@ -12,20 +12,20 @@ import (
 
 type SocketManager struct {
 	upgrader          websocket.Upgrader
-	createPostHandler *services.CreatePostHandler
-	savePostHandler   *services.SavePostHandler
+	createPostService *services.CreatePostService
+	savePostService   *services.SavePostService
 }
 
-func NewSocketManager(createPostHandler *services.CreatePostHandler, savePostHandler *services.SavePostHandler) SocketManager {
+func NewSocketManager(createPostService *services.CreatePostService, savePostService *services.SavePostService) SocketManager {
 	upgdr := websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
 
-	return SocketManager{upgrader: upgdr, createPostHandler: createPostHandler, savePostHandler: savePostHandler}
+	return SocketManager{upgrader: upgdr, createPostService: createPostService, savePostService: savePostService}
 }
 
-func (socketManager SocketManager) Handler(c echo.Context) error {
+func (socketManager SocketManager) Service(c echo.Context) error {
 	// TO PREVENT CORS ERRORS
 	socketManager.upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
@@ -59,14 +59,14 @@ func (socketManager SocketManager) Handler(c echo.Context) error {
 
 		switch parsedMessage.Type {
 		case CreatePost:
-			socketManager.createPostHandler.Create()
+			socketManager.createPostService.Create()
 		case SavePost:
-			socketManager.savePostHandler.Save(ws)
+			socketManager.savePostService.Save(ws)
 		}
 	}
 
 }
 
-func (socketManager SocketManager) GetWebsocketHandler() endpoints.Endpoint {
-	return endpoints.NewEndpoint("/ws", socketManager.Handler, "GET")
+func (socketManager SocketManager) GetWebsocketService() endpoints.Endpoint {
+	return endpoints.NewEndpoint("/ws", socketManager.Service, "GET")
 }

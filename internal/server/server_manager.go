@@ -19,7 +19,7 @@ func InitialiseAllRoutes(
 
 	return getNewServerManager(
 		homeManager.GetHomeEndpoint(),
-		socketManager.GetWebsocketHandler())
+		socketManager.GetWebsocketService())
 }
 
 func getNewServerManager(endpoints ...endpoints.Endpoint) ServerManager {

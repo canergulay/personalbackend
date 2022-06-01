@@ -13,9 +13,9 @@ func main() {
 
 	pgManager := database.InitPG()
 	blogManager := blog.NewBlogManager(pgManager.DB)
-	createPostHandler := services.NewCreatePostHandler(&blogManager)
-	savePostHandler := services.NewSavePostHandler(&blogManager)
-	sv := server.InitialiseAllRoutes(websocket.NewSocketManager(&createPostHandler, &savePostHandler), home.NewHomeManager())
+	createPostService := services.NewCreatePostService(&blogManager)
+	savePostService := services.NewSavePostService(&blogManager)
+	sv := server.InitialiseAllRoutes(websocket.NewSocketManager(&createPostService, &savePostService), home.NewHomeManager())
 	sv.StartServer(":8080")
 
 }
