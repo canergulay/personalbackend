@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.canergulay/blogbackend/internal/server/endpoints/routes/blog"
+	"github.canergulay/blogbackend/internal/server/routes/blog"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

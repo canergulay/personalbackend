@@ -1,8 +1,6 @@
 package services
 
-import (
-	"github.canergulay/blogbackend/internal/server/endpoints/routes/blog"
-)
+import "github.canergulay/blogbackend/internal/server/routes/blog"
 
 type CreatePost struct{}
 

@@ -3,7 +3,7 @@ package services
 import (
 	"fmt"
 
-	"github.canergulay/blogbackend/internal/server/endpoints/routes/blog"
+	"github.canergulay/blogbackend/internal/server/routes/blog"
 )
 
 type SavePostHandler struct {

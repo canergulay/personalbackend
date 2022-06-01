@@ -3,9 +3,9 @@ package server
 import (
 	"net/http"
 
-	endpoints "github.canergulay/blogbackend/internal/server/endpoints"
-	"github.canergulay/blogbackend/internal/server/endpoints/routes/home"
-	"github.canergulay/blogbackend/internal/server/endpoints/websocket"
+	"github.canergulay/blogbackend/internal/server/endpoints"
+	"github.canergulay/blogbackend/internal/server/routes/home"
+	"github.canergulay/blogbackend/internal/server/websocket"
 	"github.com/labstack/echo/v4"
 )
 
