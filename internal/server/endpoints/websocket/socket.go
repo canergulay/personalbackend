@@ -5,18 +5,18 @@ import (
 	"net/http"
 
 	"github.canergulay/blogbackend/internal/server/endpoints"
-	"github.canergulay/blogbackend/internal/server/endpoints/routes/websocket/handlers"
+	"github.canergulay/blogbackend/internal/server/services"
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
 )
 
 type SocketManager struct {
 	upgrader          websocket.Upgrader
-	createPostHandler *handlers.CreatePostHandler
-	savePostHandler   *handlers.SavePostHandler
+	createPostHandler *services.CreatePostHandler
+	savePostHandler   *services.SavePostHandler
 }
 
-func NewSocketManager(createPostHandler *handlers.CreatePostHandler, savePostHandler *handlers.SavePostHandler) SocketManager {
+func NewSocketManager(createPostHandler *services.CreatePostHandler, savePostHandler *services.SavePostHandler) SocketManager {
 	upgdr := websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
@@ -51,7 +51,7 @@ func (socketManager SocketManager) Handler(c echo.Context) error {
 			return err
 		}
 
-		err2, parsedMessage := ParseMessage(msg)
+		parsedMessage, err2 := ParseMessage(msg)
 
 		if err2 != nil {
 			return err
@@ -59,7 +59,7 @@ func (socketManager SocketManager) Handler(c echo.Context) error {
 
 		switch parsedMessage.Type {
 		case CreatePost:
-			socketManager.createPostHandler.Create(ws)
+			socketManager.createPostHandler.Create()
 		case SavePost:
 			socketManager.savePostHandler.Save(ws)
 		}

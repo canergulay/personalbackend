@@ -5,7 +5,7 @@ import (
 
 	endpoints "github.canergulay/blogbackend/internal/server/endpoints"
 	"github.canergulay/blogbackend/internal/server/endpoints/routes/home"
-	"github.canergulay/blogbackend/internal/server/endpoints/routes/websocket"
+	"github.canergulay/blogbackend/internal/server/endpoints/websocket"
 	"github.com/labstack/echo/v4"
 )
 

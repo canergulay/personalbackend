@@ -5,16 +5,16 @@ import (
 	"github.canergulay/blogbackend/internal/server"
 	"github.canergulay/blogbackend/internal/server/endpoints/routes/blog"
 	"github.canergulay/blogbackend/internal/server/endpoints/routes/home"
-	"github.canergulay/blogbackend/internal/server/endpoints/routes/websocket"
-	"github.canergulay/blogbackend/internal/server/endpoints/routes/websocket/handlers"
+	"github.canergulay/blogbackend/internal/server/endpoints/websocket"
+	"github.canergulay/blogbackend/internal/server/services"
 )
 
 func main() {
 
 	pgManager := database.InitPG()
 	blogManager := blog.NewBlogManager(pgManager.DB)
-	createPostHandler := handlers.NewCreatePostHandler(&blogManager)
-	savePostHandler := handlers.NewSavePostHandler(&blogManager)
+	createPostHandler := services.NewCreatePostHandler(&blogManager)
+	savePostHandler := services.NewSavePostHandler(&blogManager)
 	sv := server.InitialiseAllRoutes(websocket.NewSocketManager(&createPostHandler, &savePostHandler), home.NewHomeManager())
 	sv.StartServer(":8080")
 
