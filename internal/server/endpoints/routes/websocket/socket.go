@@ -51,7 +51,7 @@ func handler(c echo.Context) error {
 		case CreatePost:
 			handlers.CreatePostHandler(ws)
 		case SavePost:
-			handlers.HandleSavePost(ws, parsedMessage)
+			handlers.SavePostHandler(ws, parsedMessage)
 		}
 	}
 
