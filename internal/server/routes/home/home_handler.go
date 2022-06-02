@@ -10,8 +10,8 @@ import (
 type HomeManager struct {
 }
 
-func NewHomeManager() HomeManager {
-	return HomeManager{}
+func NewHomeManager() *HomeManager {
+	return &HomeManager{}
 }
 
 func (h HomeManager) Handler(c echo.Context) error {

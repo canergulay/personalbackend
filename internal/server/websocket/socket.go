@@ -15,13 +15,13 @@ type SocketManager struct {
 	websocketHandler *handlers.WebsocketHandler
 }
 
-func NewSocketManager(wshndl *handlers.WebsocketHandler) SocketManager {
+func NewSocketManager(wshndl *handlers.WebsocketHandler) *SocketManager {
 	upgdr := websocket.Upgrader{
 		ReadBufferSize:  1024,
 		WriteBufferSize: 1024,
 	}
 
-	return SocketManager{upgrader: upgdr, websocketHandler: wshndl}
+	return &SocketManager{upgrader: upgdr, websocketHandler: wshndl}
 }
 
 func (socketManager SocketManager) Service(c echo.Context) error {
@@ -61,7 +61,7 @@ func (socketManager SocketManager) Service(c echo.Context) error {
 		case CreatePost:
 			socketManager.websocketHandler.CreatePost(ws)
 		case SavePost:
-			socketManager.websocketHandler.SavePost(parsedMessage.Data.(map[string]interface{}), ws)
+			socketManager.websocketHandler.SavePost(parsedMessage.Data, ws)
 		}
 	}
 

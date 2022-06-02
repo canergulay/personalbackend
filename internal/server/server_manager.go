@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.canergulay/blogbackend/internal/server/endpoints"
+	"github.canergulay/blogbackend/internal/server/routes/blog"
 	"github.canergulay/blogbackend/internal/server/routes/home"
 	"github.canergulay/blogbackend/internal/server/websocket"
 	"github.com/labstack/echo/v4"
@@ -14,12 +15,14 @@ type ServerManager struct {
 }
 
 func InitialiseAllRoutes(
-	socketManager websocket.SocketManager,
-	homeManager home.HomeManager) ServerManager {
+	blogManager *blog.BlogManager,
+	socketManager *websocket.SocketManager,
+	homeManager *home.HomeManager) ServerManager {
 
 	return getNewServerManager(
 		homeManager.GetHomeEndpoint(),
-		socketManager.GetWebsocketService())
+		socketManager.GetWebsocketService(),
+		blogManager.GetBlogEndpoint())
 }
 
 func getNewServerManager(endpoints ...endpoints.Endpoint) ServerManager {

@@ -10,8 +10,9 @@ type WSResponse struct {
 type WebsocketHandler struct {
 	createPostService *services.CreatePostService
 	savePostService   *services.SavePostService
+	getPostsService   *services.GetPostsService
 }
 
-func NewWebSocketHandler(cpsv *services.CreatePostService, svps *services.SavePostService) WebsocketHandler {
+func NewWebSocketHandler(cpsv *services.CreatePostService, svps *services.SavePostService, gpsv *services.GetPostsService) WebsocketHandler {
 	return WebsocketHandler{createPostService: cpsv, savePostService: svps}
 }
