@@ -51,16 +51,17 @@ func (socketManager SocketManager) Service(c echo.Context) error {
 		}
 
 		parsedMessage, err2 := ParseMessage(msg)
-
+		fmt.Println(parsedMessage.Data, parsedMessage.Type)
 		if err2 != nil {
-			return err
+			fmt.Println("ERROR WEN PARSING IT", err2)
+			return err2
 		}
 
 		switch parsedMessage.Type {
 		case CreatePost:
-			socketManager.websocketHandler.CreatePost()
+			socketManager.websocketHandler.CreatePost(ws)
 		case SavePost:
-			socketManager.websocketHandler.SavePost(msg, ws)
+			socketManager.websocketHandler.SavePost(parsedMessage.Data.(map[string]interface{}), ws)
 		}
 	}
 

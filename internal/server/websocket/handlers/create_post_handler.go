@@ -1,6 +1,9 @@
 package handlers
 
-func (wbsckhandler WebsocketHandler) CreatePost() int {
+import "github.com/gorilla/websocket"
+
+func (wbsckhandler WebsocketHandler) CreatePost(conn *websocket.Conn) {
 	postCreated := wbsckhandler.createPostService.Create()
-	return postCreated
+	response := WSResponse{Status: 0, Data: postCreated}
+	conn.WriteJSON(response)
 }

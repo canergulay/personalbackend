@@ -1,6 +1,9 @@
 package websocket
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 const (
 	CreatePost = iota
@@ -14,6 +17,7 @@ type Message struct {
 
 func ParseMessage(message []byte) (*Message, error) {
 	var messageParsed Message
+	fmt.Println(string(message))
 	err := json.Unmarshal(message, &messageParsed)
 	if err != nil {
 		return nil, err
