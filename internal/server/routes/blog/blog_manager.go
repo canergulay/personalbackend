@@ -2,6 +2,7 @@ package blog
 
 import (
 	"encoding/json"
+	"io"
 	"net/http"
 
 	"github.canergulay/blogbackend/internal/server/endpoints"
@@ -17,18 +18,12 @@ func NewBlogManager(db *gorm.DB) *BlogManager {
 	return &BlogManager{DB: db}
 }
 
-func (bm BlogManager) CreateBlog() int {
-	post := Post{}
-	bm.DB.Create(&post)
-	return post.ID
-}
-
 func (h BlogManager) Handler(c echo.Context) error {
 
 	body := make(map[string]interface{})
 	err := json.NewDecoder(c.Request().Body).Decode(&body)
-	if err != nil {
-		c.String(500, "an unexpected error has occured")
+	if err != io.EOF {
+		c.String(500, "an unexpected error has occured"+err.Error()+"\n")
 	}
 
 	lastID := body["lastID"]
@@ -50,6 +45,12 @@ func (h BlogManager) Handler(c echo.Context) error {
 
 func (h BlogManager) GetBlogEndpoint() endpoints.Endpoint {
 	return endpoints.NewEndpoint("/blog", h.Handler, "GET")
+}
+
+func (bm BlogManager) CreateBlog() int {
+	post := Post{}
+	bm.DB.Create(&post)
+	return post.ID
 }
 
 func (bm BlogManager) SavePost(post *Post) *Post {
