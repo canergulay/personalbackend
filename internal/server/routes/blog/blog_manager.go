@@ -3,7 +3,6 @@ package blog
 import (
 	"encoding/json"
 	"io"
-	"net/http"
 
 	"github.canergulay/blogbackend/internal/server/endpoints"
 	"github.com/labstack/echo/v4"
@@ -40,7 +39,7 @@ func (h BlogManager) Handler(c echo.Context) error {
 
 	c.JSON(200, posts)
 
-	return c.String(http.StatusOK, "Hello, World!")
+	return err
 }
 
 func (h BlogManager) GetBlogEndpoint() endpoints.Endpoint {

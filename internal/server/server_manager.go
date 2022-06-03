@@ -7,7 +7,9 @@ import (
 	"github.canergulay/blogbackend/internal/server/routes/blog"
 	"github.canergulay/blogbackend/internal/server/routes/home"
 	"github.canergulay/blogbackend/internal/server/websocket"
+
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 type ServerManager struct {
@@ -28,6 +30,10 @@ func InitialiseAllRoutes(
 func getNewServerManager(endpoints ...endpoints.Endpoint) ServerManager {
 	e := echo.New()
 
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 	// INJECTION OF ALL THE ENDPOINTS
 	for _, endpoint := range endpoints {
 		switch endpoint.GetMethod() {
