@@ -1,18 +1,22 @@
 package services
 
-import "github.canergulay/blogbackend/internal/server/routes/blog"
+import (
+	"github.canergulay/blogbackend/internal/server/models"
+	"gorm.io/gorm"
+)
 
 type CreatePost struct{}
 
 type CreatePostService struct {
-	blogManager *blog.BlogManager
+	DB *gorm.DB
 }
 
-func NewCreatePostService(blogManager *blog.BlogManager) CreatePostService {
-	return CreatePostService{blogManager: blogManager}
+func NewCreatePostService(db *gorm.DB) CreatePostService {
+	return CreatePostService{DB: db}
 }
 
 func (cph CreatePostService) Create() int {
-	createdPostID := cph.blogManager.CreateBlog()
-	return createdPostID
+	post := models.Post{}
+	cph.DB.Create(&post)
+	return post.ID
 }

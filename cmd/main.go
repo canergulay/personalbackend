@@ -13,12 +13,12 @@ import (
 func main() {
 
 	pgManager := database.InitPG()
-	blogManager := blog.NewBlogManager(pgManager.DB)
-	createPostService := services.NewCreatePostService(blogManager)
-	savePostService := services.NewSavePostService(blogManager)
-	getPostsService := services.NewGetPostService(blogManager)
+	createPostService := services.NewCreatePostService(pgManager.DB)
+	savePostService := services.NewSavePostService(pgManager.DB)
+	getPostsService := services.NewGetPostService(pgManager.DB)
+	blogManager := blog.NewBlogManager(&savePostService, &getPostsService)
 	websocketHandler := handlers.NewWebSocketHandler(&createPostService, &savePostService, &getPostsService)
-	sv := server.InitialiseAllRoutes(blog.NewBlogManager(pgManager.DB), websocket.NewSocketManager(&websocketHandler), home.NewHomeManager())
+	sv := server.InitialiseAllRoutes(blogManager, websocket.NewSocketManager(&websocketHandler), home.NewHomeManager())
 	sv.StartServer(":8080")
 
 }

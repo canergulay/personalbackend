@@ -1,17 +1,19 @@
 package services
 
 import (
-	"github.canergulay/blogbackend/internal/server/routes/blog"
+	"github.canergulay/blogbackend/internal/server/models"
+	"gorm.io/gorm"
 )
 
 type SavePostService struct {
-	blogManager *blog.BlogManager
+	DB *gorm.DB
 }
 
-func NewSavePostService(blogManager *blog.BlogManager) SavePostService {
-	return SavePostService{blogManager: blogManager}
+func NewSavePostService(db *gorm.DB) SavePostService {
+	return SavePostService{DB: db}
 }
 
-func (svph SavePostService) Save(post *blog.Post) *blog.Post {
-	return svph.blogManager.SavePost(post)
+func (svph SavePostService) Save(post *models.Post) *models.Post {
+	svph.DB.Save(post)
+	return post
 }

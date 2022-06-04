@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.canergulay/blogbackend/internal/server/routes/blog"
+	"github.canergulay/blogbackend/internal/server/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -32,5 +32,5 @@ func InitPG() PGManager {
 }
 
 func autoMigrater(db *gorm.DB) {
-	db.AutoMigrate(&blog.Post{})
+	db.AutoMigrate(&models.Post{})
 }

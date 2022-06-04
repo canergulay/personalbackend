@@ -15,6 +15,11 @@ type Message struct {
 	Data interface{} `json:"data"`
 }
 
+type Result struct {
+	Result int         `json:"result"`
+	Data   interface{} `json:"data"`
+}
+
 func ParseMessage(message []byte) (*Message, error) {
 	var messageParsed Message
 	fmt.Println(string(message))
