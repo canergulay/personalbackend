@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.canergulay/blogbackend/internal/server/models"
 	"gorm.io/gorm"
 )
@@ -18,5 +20,7 @@ func NewCreatePostService(db *gorm.DB) CreatePostService {
 func (cph CreatePostService) Create() int {
 	post := models.Post{}
 	cph.DB.Create(&post)
+	fmt.Println(post, "created !")
 	return post.ID
+
 }

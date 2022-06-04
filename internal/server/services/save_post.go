@@ -14,6 +14,6 @@ func NewSavePostService(db *gorm.DB) SavePostService {
 }
 
 func (svph SavePostService) Save(post *models.Post) *models.Post {
-	svph.DB.Save(post)
+	svph.DB.Model(post).Updates(post)
 	return post
 }
