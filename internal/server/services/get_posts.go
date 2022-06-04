@@ -31,7 +31,9 @@ func (gps *GetPostsService) GetPosts(lastID int) []models.Post {
 
 func (gps *GetPostsService) GetPostById(id int) *models.Post {
 	var post models.Post
-	result := gps.DB.Model(models.Post{}).Where("id =", id).Find(&post)
+
+	result := gps.DB.First(&post, id)
+
 	if result.Error != nil {
 		return nil
 	}

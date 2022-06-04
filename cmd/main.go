@@ -11,7 +11,6 @@ import (
 )
 
 func main() {
-
 	pgManager := database.InitPG()
 	createPostService := services.NewCreatePostService(pgManager.DB)
 	savePostService := services.NewSavePostService(pgManager.DB)
