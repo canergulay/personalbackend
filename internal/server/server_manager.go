@@ -6,6 +6,7 @@ import (
 	"github.canergulay/blogbackend/internal/server/endpoints"
 	"github.canergulay/blogbackend/internal/server/routes/blog"
 	"github.canergulay/blogbackend/internal/server/routes/home"
+	"github.canergulay/blogbackend/internal/server/routes/upload"
 	"github.canergulay/blogbackend/internal/server/websocket"
 
 	"github.com/labstack/echo/v4"
@@ -19,12 +20,14 @@ type ServerManager struct {
 func InitialiseAllRoutes(
 	blogManager *blog.BlogManager,
 	socketManager *websocket.SocketManager,
-	homeManager *home.HomeManager) ServerManager {
+	homeManager *home.HomeManager,
+	uploadManager *upload.UploadManager) ServerManager {
 
 	return getNewServerManager(
 		homeManager.GetHomeEndpoint(),
 		socketManager.GetWebsocketService(),
-		blogManager.GetPostsEndpoint(), blogManager.GetPostByIdHandler())
+		blogManager.GetPostsEndpoint(), blogManager.GetPostByIdHandler(),
+		uploadManager.GetUploadEndpoint())
 }
 
 func getNewServerManager(endpoints ...endpoints.Endpoint) ServerManager {
