@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	"github.canergulay/blogbackend/internal/core"
 	"github.canergulay/blogbackend/internal/server/endpoints"
 	"github.canergulay/blogbackend/internal/server/routes/blog"
 	"github.canergulay/blogbackend/internal/server/routes/home"
@@ -32,7 +33,7 @@ func InitialiseAllRoutes(
 
 func getNewServerManager(endpoints ...endpoints.Endpoint) ServerManager {
 	e := echo.New()
-
+	e.Static("/assets", core.ASSET_PATH)
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},

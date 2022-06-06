@@ -7,7 +7,9 @@ import (
 	"mime/multipart"
 	"net/http"
 	"os"
+	"time"
 
+	"github.canergulay/blogbackend/internal/core"
 	"github.canergulay/blogbackend/internal/server/endpoints"
 	"github.com/labstack/echo/v4"
 )
@@ -20,54 +22,47 @@ func NewUploadManager() *UploadManager {
 }
 
 func (h UploadManager) Handler(c echo.Context) error {
-	fmt.Println("geldi")
 	file, err := c.FormFile("file")
-	fmt.Println("geldi", file.Filename)
 
 	if err != nil {
 		c.String(http.StatusInternalServerError, "an unexpected error occured...")
 		return err
 	}
 
-	saveErr := saveFile(file)
+	fileName, saveErr := saveFile(file)
 	if saveErr != nil {
 		return saveErr
 	}
-	return c.HTML(http.StatusOK, "upload has been completed successfully !")
+	fileNameWithExtension := core.ASSET_EXTENSION + fileName
+	return c.HTML(http.StatusOK, fileNameWithExtension)
 }
 
 func (h UploadManager) GetUploadEndpoint() endpoints.Endpoint {
 	return endpoints.NewEndpoint("/upload", h.Handler, "POST")
 }
 
-func saveFile(file *multipart.FileHeader) error {
-	n1, n2, n3, n4, n5 := rand.Intn(100), rand.Intn(100), rand.Intn(100), rand.Intn(100), rand.Intn(1000000)
-	nAll := fmt.Sprintf("%d-%d-%d-%d-%d", n1, n2, n3, n4, n5)
-	fileNameUniqifed := fmt.Sprintf("%s-%s", nAll, file.Filename)
-	fmt.Println(fileNameUniqifed)
+func saveFile(file *multipart.FileHeader) (string, error) {
+	fileNameUniqifed := fmt.Sprintf("%d_%d_%s", rand.Intn(1000000), time.Now().Unix(), file.Filename)
+	fileNameWithAssetPath := fmt.Sprintf("%s%s", core.ASSET_PATH, fileNameUniqifed)
 	src, err := file.Open()
-	fmt.Println(err)
 
 	defer func() {
 		cerr := src.Close()
-		fmt.Println(cerr)
 
 		if err == nil {
 			err = cerr
 		}
 	}()
-	dst, err := os.Create(fileNameUniqifed)
-	fmt.Println(err)
+	dst, err := os.Create(fileNameWithAssetPath)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer dst.Close()
 
 	if _, err := io.Copy(dst, src); err != nil {
-		return err
+		return "", err
 	}
-	fmt.Println(err)
 
-	return err
+	return fileNameUniqifed, nil
 }
