@@ -42,7 +42,7 @@ func (h BlogManager) getCommentsByPostId(c echo.Context) error {
 	comments, err := h.getCommentsService.GetCommentsByPostId(parsedPostId)
 	if err != nil {
 		// TODO: ADD PROPER ERROR HANDLING.
-		fmt.Println(err) //
+		fmt.Println(err)
 		errMessage := "unexpected"
 		c.String(http.StatusInternalServerError, errMessage)
 		return errors.New(errMessage)
