@@ -5,8 +5,9 @@ import (
 )
 
 type BlogManager struct {
-	savePostService *services.SavePostService
-	getPostsService *services.GetPostsService
+	savePostService    *services.SavePostService
+	getPostsService    *services.GetPostsService
+	getCommentsService *services.GetCommentsService
 }
 
 func NewBlogManager(sps *services.SavePostService, gps *services.GetPostsService) *BlogManager {
