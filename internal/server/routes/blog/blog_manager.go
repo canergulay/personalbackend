@@ -10,6 +10,6 @@ type BlogManager struct {
 	getCommentsService *services.GetCommentsService
 }
 
-func NewBlogManager(sps *services.SavePostService, gps *services.GetPostsService) *BlogManager {
-	return &BlogManager{savePostService: sps, getPostsService: gps}
+func NewBlogManager(sps *services.SavePostService, gps *services.GetPostsService, gcs *services.GetCommentsService) *BlogManager {
+	return &BlogManager{savePostService: sps, getPostsService: gps, getCommentsService: gcs}
 }

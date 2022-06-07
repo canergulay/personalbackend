@@ -12,13 +12,27 @@ import (
 )
 
 func main() {
+	// DATABASE INITIALIZATION \\
 	pgManager := database.InitPG()
+
+	// SERVICES INITIALIZATION \\
 	createPostService := services.NewCreatePostService(pgManager.DB)
 	savePostService := services.NewSavePostService(pgManager.DB)
 	getPostsService := services.NewGetPostService(pgManager.DB)
-	blogManager := blog.NewBlogManager(&savePostService, &getPostsService)
+	getCommentsService := services.NewGetCommentsService(pgManager.DB)
+
+	// AS THE NAME SUGGESTS.. \\
 	websocketHandler := handlers.NewWebSocketHandler(&createPostService, &savePostService, &getPostsService)
-	sv := server.InitialiseAllRoutes(blogManager, websocket.NewSocketManager(&websocketHandler), home.NewHomeManager(), upload.NewUploadManager())
+
+	// A MANAGER IS LIKE MODULE OF A FEW COMPONENTS. THEY USE SERVICES TO OBTAIN CERTAIN FUNCTIONALITIES. \\
+	blogManager := blog.NewBlogManager(&savePostService, &getPostsService, &getCommentsService)
+	homeManager := home.NewHomeManager()
+	uploadManager := upload.NewUploadManager()
+	webSocketManager := websocket.NewSocketManager(&websocketHandler)
+
+	// KICK THE ASS OF THE SERVER \\
+	sv := server.InitialiseAllRoutes(blogManager, webSocketManager, homeManager, uploadManager)
+
 	sv.StartServer(":8080")
 
 }
