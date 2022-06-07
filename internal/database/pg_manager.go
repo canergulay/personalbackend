@@ -33,4 +33,5 @@ func InitPG() PGManager {
 
 func autoMigrater(db *gorm.DB) {
 	db.AutoMigrate(&models.Post{})
+	db.AutoMigrate(&models.Comment{})
 }
