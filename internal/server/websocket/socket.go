@@ -24,7 +24,7 @@ func NewSocketManager(wshndl *handlers.WebsocketHandler) *SocketManager {
 	return &SocketManager{upgrader: upgdr, websocketHandler: wshndl}
 }
 
-func (socketManager SocketManager) Service(c echo.Context) error {
+func (socketManager SocketManager) Handler(c echo.Context) error {
 	// TO PREVENT CORS ERRORS
 	socketManager.upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 
@@ -67,6 +67,6 @@ func (socketManager SocketManager) Service(c echo.Context) error {
 
 }
 
-func (socketManager SocketManager) GetWebsocketService() endpoints.Endpoint {
-	return endpoints.NewEndpoint("/ws", socketManager.Service, "GET")
+func (socketManager SocketManager) GetWebsocketEndpoint() endpoints.Endpoint {
+	return endpoints.NewEndpoint("/ws", socketManager.Handler, "GET")
 }

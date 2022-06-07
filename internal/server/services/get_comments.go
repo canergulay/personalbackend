@@ -15,7 +15,7 @@ func NewGetCommentsService(db *gorm.DB) GetCommentsService {
 
 func (gcs *GetCommentsService) GetCommentsByPostId(postid int) (*[]models.Comment, error) {
 	var comments []models.Comment
-	result := gcs.DB.Model(models.Comment{}).Where("postid = ", postid).Find(&comments)
+	result := gcs.DB.Model(models.Comment{}).Where("post_id = ?", postid).Find(&comments)
 	if result.Error != nil {
 		return &comments, result.Error
 	}

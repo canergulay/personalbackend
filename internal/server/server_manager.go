@@ -26,9 +26,12 @@ func InitialiseAllRoutes(
 
 	return getNewServerManager(
 		homeManager.GetHomeEndpoint(),
-		socketManager.GetWebsocketService(),
-		blogManager.GetPostsEndpoint(), blogManager.GetPostByIdHandler(),
-		uploadManager.GetUploadEndpoint())
+		socketManager.GetWebsocketEndpoint(),
+		blogManager.GetPostsEndpoint(),
+		blogManager.GetPostByIdEndpoint(),
+		blogManager.GetCommentsByPostIdEndpoint(),
+		uploadManager.GetUploadEndpoint(),
+	)
 }
 
 func getNewServerManager(endpoints ...endpoints.Endpoint) ServerManager {

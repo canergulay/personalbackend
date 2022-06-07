@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h BlogManager) GetPostByIdHandler() endpoints.Endpoint {
+func (h BlogManager) GetPostByIdEndpoint() endpoints.Endpoint {
 	return endpoints.NewEndpoint("/post/:id", h.getPostByIdHandler, "GET")
 }
 
