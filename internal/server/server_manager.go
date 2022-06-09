@@ -18,6 +18,8 @@ type ServerManager struct {
 	e echo.Echo
 }
 
+const ASSET_PUBLIC = "/assets"
+
 func InitialiseAllRoutes(
 	blogManager *blog.BlogManager,
 	socketManager *websocket.SocketManager,
@@ -36,7 +38,7 @@ func InitialiseAllRoutes(
 
 func getNewServerManager(endpoints ...endpoints.Endpoint) ServerManager {
 	e := echo.New()
-	e.Static("/assets", core.ASSET_PATH)
+	e.Static(ASSET_PUBLIC, core.ASSET_PATH)
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
